@@ -1,136 +1,145 @@
 'use client';
 
-import axios from 'axios';
-import { AiFillGithub } from 'react-icons/ai';
-import { FcGoogle } from 'react-icons/fc';
-import { useState, useCallback } from 'react';
+import { signIn } from "next-auth/react";
+
+import { AiFillGithub } from 'react-icons/ai'
+import { FcGoogle } from "react-icons/fc";
+import { useCallback, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import {
     FieldValues,
     SubmitHandler,
-    useForm,
-} from 'react-hook-form';
+    useForm
+} from 'react-hook-form'
 
-import useRegisterModal from '@/app/hooks/useLoginModal';
-import Heading from '@/app/components/Heading';
-import Modal from '@/app/components/modals/Modal';
-import Input from '@/app/components/inputs/Input';
-import Button from '@/app/components/Button'; 
-import { toast }   from 'react-hot-toast';
-import useLoginModal from '@/app/hooks/useLoginModal';
-
+import useRegisterModal from "@/app/hooks/useRegisterModal";
+import Modal from "@/app/components/modals/Modal";
+import Heading from "@/app/components/Heading";
+import Input from "@/app/components/inputs/Input";
+import toast from "react-hot-toast";
+import Button from "@/app/components/Button";
+import useLoginModal from "@/app/hooks/useLoginModal";
 const LoginModal = () => {
- const RegisterModal = useRegisterModal();
- const LoginModal = useLoginModal();
- const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
+
+    const registerModal = useRegisterModal();
+    const loginModal = useLoginModal();
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const {
         register,
         handleSubmit,
-        formState: { errors, }
+        formState: {
+            errors
+        }
     } = useForm<FieldValues>({
         defaultValues: {
-            name: '',
             email: '',
             password: ''
         }
     });
 
-    const onSubmit: SubmitHandler<FieldValues> =  (data) => {
+    const onSubmit: SubmitHandler<FieldValues> = (data) => {
         setIsLoading(true);
 
-        axios.post('/api/register', data)
-        .then(() => {
-            RegisterModal.onClose();
+        signIn('credentials', {
+            ...data,
+            redirect: false
         })
-        .catch((error) => {
-            toast.error('Il ya erreur');
-        })
-        .finally(() => {
+        .then((callback) => {
             setIsLoading(false);
-        })
- 
-}
 
-const bodyContent = (
-    <div className="flex flex-col gap-4">
-            <Heading 
-                title="Bienvenue sur GreenLoc"
-                subTitle="Inscrivez-vous pour continuer"
+            if(callback?.ok){
+                toast.success('Logged in');
+                router.refresh();
+                loginModal.onClose()
+            }
+
+            if(callback?.error) {
+                toast.error(callback.error)
+            }
+        })
+    }
+
+    const toggle = useCallback(() => {
+        loginModal.onClose();
+        registerModal.onOpen();
+    }, [loginModal, registerModal]);
+
+    const bodyContent = (
+        <div className="flex flex-col gap-4">
+            <Heading
+                title="Welcome back"
+                subTitle="Login to your account!"
             />
+
             <Input
                 id="email"
-                label="Email"
+                label="E-mail"
                 disabled={isLoading}
                 register={register}
                 errors={errors}
                 required
-             />
-             <Input
-                id="Nom"
-                label="Nom"
-                disabled={isLoading}
-                register={register}
-                errors={errors}
-                required
-             />
-             <Input
+            />
+
+            <Input
                 id="password"
+                type="password"
                 label="Password"
                 disabled={isLoading}
                 register={register}
                 errors={errors}
                 required
-             />
+            />
         </div>
-);
-const footerContent = (
-    <div className='flex flex-col gap-4'>
-        <hr />
-        <Button 
-            label="Continue with Google"
-            icon={FcGoogle }
-            onClick={() => {}}
-            disabled={isLoading}
+    )
+
+    const footerContent = (
+        <div className="flex flex-col gap-4 mt-3">
+            <hr />
+            <Button
+                outline
+                label="Continue with Google"
+                icon={FcGoogle}
+                onClick={() => signIn('google')}
             />
-        <Button
-            label="Continue with Github"
-            icon={AiFillGithub}
-            onClick={() => {}}
-            disabled={isLoading}
+
+            <Button
+                outline
+                label="Continue with Github"
+                icon={AiFillGithub}
+                onClick={() => signIn('github')}
             />
-        <div className="
-            text-neutral-500
-            text-center
-            mt-4
-            font-light">
-        <div
-            className="justify-center flex flex-row items-center gap-2">
-                <div>
-                    Already have an account?
+            <div className="text-neutral-500 text-center mt-4 font-light">
+                <div className="flex flex-row items-center justify-center gap-2">
+                    <div>
+                        First time using Airbnb?
+                    </div>
+                    <div
+                        onClick={toggle}
+                        className="text-neutral-800 cursor-pointer hover:underline"
+                    >
+                        Create an account
+                    </div>
                 </div>
-                <div className="
-                text-neutral-800
-                 cursor-pointer
-                 hover:underline">
-                    Se connecter
             </div>
         </div>
-    </div>
- </div>
-)   
+    )
+
     return (
-        <Modal 
+        <Modal
             disabled={isLoading}
-            isOpen={LoginModal.isOpen}
-            title="Register"
+            isOpen={loginModal.isOpen}
+            title="Login"
             actionLabel="Continue"
-            onClose={LoginModal.onClose}
+            onClose={loginModal.onClose}
             onSubmit={handleSubmit(onSubmit)}
             body={bodyContent}
             footer={footerContent}
-            />
- );
+        />
+    )
 }
 
 export default LoginModal;
