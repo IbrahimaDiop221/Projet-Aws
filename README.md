@@ -9,3 +9,15 @@ Pour executer l'application il faut :
 6   npm install axios
 7   npm install react-hook-form
 8   npm install react-hot-toast
+
+----------------------
+
+setup prisma :  npm install -D prisma
+npx  prisma init 
+
+npm install next-auth @prisma/client
+npm install @next-auth/prisma-adapter
+
+npm install bcrypt
+
+npm install -D @types/bcrypt

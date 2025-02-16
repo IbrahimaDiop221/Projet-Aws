@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String?
+  email String? @unique // Champ optionnel, mais s'il est présent, il doit être unique;
+  hashedPassword String? // Champ optionnel pour stocker le mot de passe haché de l'utilisateur
+  emailVerified DateTime?
+  image String?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+  favoriteIds String[] @db.ObjectId  // Liste d'ObjectId représentant les maisons préférées de l'utilisateur
+  accounts Account[] //relation un à plusieurs
+  reservations Reservation[] //relation un à plusieurs
+  listings Listing[] //relation un à plusieurs
+  
+}
+
+model Account {
+       id String @id @default(auto()) @map("_id") @db.ObjectId
+       userId String @db.ObjectId // Référence à l'identifiant de l'utilisateur associé
+       user User @relation(fields: [userId], references: [id], onDelete: Cascade) // Définition de la relation avec le modèle 'User'; si un utilisateur est supprimé, ses comptes le seront également
+       provider String
+       providerAccountId String
+       type String
+       refresh_token String? @db.String
+       access_token String? @db.String
+       expires_at Int?
+       token_type String?
+       scope String?
+       id_token String? @db.String
+       session_state String?
+  @@unique([provider, providerAccountId])
+}
+
+ model Listing {  //  représente une annonce de propriété ou maison sur la plateforme
+    id String @id @default(auto()) @map("_id") @db.ObjectId
+    title String
+    description String
+    imageSrc String
+    createdAt DateTime @default(now())
+    category String
+    roomCount Int
+    bathroomCount Int
+    guestCount Int
+    locationValue String
+    userId String @db.ObjectId
+    price Int
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)  // Relation avec le modèle 'User'; si un utilisateur est supprimé, ses annonces le seront également
+    reservations Reservation[] // Relation un-à-plusieurs;
+}
+
+model Reservation {
+    id String @id @default(auto()) @map("_id") @db.ObjectId
+    userId String @db.ObjectId
+    listingId String @db.ObjectId
+    startDate DateTime
+    endDate DateTime
+    totalPrice Int
+    createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+ 
+
+
