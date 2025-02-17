@@ -22,28 +22,8 @@ model User {
   image String?
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
-  favoriteIds String[] @db.ObjectId  // Liste d'ObjectId représentant les maisons préférées de l'utilisateur
-  accounts Account[] //relation un à plusieurs
   reservations Reservation[] //relation un à plusieurs
   listings Listing[] //relation un à plusieurs
-  
-}
-
-model Account {
-       id String @id @default(auto()) @map("_id") @db.ObjectId
-       userId String @db.ObjectId // Référence à l'identifiant de l'utilisateur associé
-       user User @relation(fields: [userId], references: [id], onDelete: Cascade) // Définition de la relation avec le modèle 'User'; si un utilisateur est supprimé, ses comptes le seront également
-       provider String
-       providerAccountId String
-       type String
-       refresh_token String? @db.String
-       access_token String? @db.String
-       expires_at Int?
-       token_type String?
-       scope String?
-       id_token String? @db.String
-       session_state String?
-  @@unique([provider, providerAccountId])
 }
 
  model Listing {  //  représente une annonce de propriété ou maison sur la plateforme

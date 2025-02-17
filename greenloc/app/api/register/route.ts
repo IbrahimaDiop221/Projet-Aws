@@ -22,3 +22,5 @@ export async function POST(request: Request) {
     // Retourne l'utilisateur créé sous format JSON
     return NextResponse.json(user);
 }
+
+

@@ -1,35 +1,28 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import prisma from "@/app/libs/prismadb";
+import { NextResponse } from "next/server";
+import jwt from 'jsonwebtoken'; 
+import axios from "axios";
 
-export async function getSession() {
-  return getServerSession(authOptions);
-}
-
-export default async function getCurrentUser() {
+export default async function getCurrentUser(token: any) {
     try {
-        const session = await getSession();
-
-        if (!session?.user?.email) {
-            return null;
+        if (!token) {
+            console.error('Token is missing, user is not authenticated');
+            return;
         }
 
-        const currentUser = await prisma.user.findUnique({
-            where: {
-                email: session.user.email as string
-            }
+        // Make the request to the server with the token in the Authorization header
+        const response = await axios.get('/api/me', {
+            headers: {
+                Authorization: `Bearer ${token}`, // Pass the token in the Authorization header
+            },
         });
 
-        if (!currentUser) {
-            return null;
-        }
-
-        return {
-            ...currentUser,
-            createdAt: currentUser.createdAt?.toISOString(),
-            updatedAt: currentUser.updatedAt?.toISOString(),
-            emailVerified: currentUser.emailVerified?.toISOString() || null,
-        };
+        // Handle the server response
+        console.log(response);
+    
+       return response.data.currentUser
 
     } catch (error: any) {
         return null;

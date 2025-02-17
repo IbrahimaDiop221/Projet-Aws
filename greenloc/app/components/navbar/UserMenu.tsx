@@ -6,14 +6,13 @@ import { useCallback, useState } from "react";
 import MenuItem from "./MenuItem";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import useLoginModal from "@/app/hooks/useLoginModal";
-import {User} from "@/app/models/User";
 import {signOut} from "next-auth/react";
 
-import { SafeUser } from "@/app/types";
+
 
 
 interface UserMenuProps {
-    currentUser?: SafeUser | null;
+    currentUser?: any | null;
 
 }
 const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
@@ -23,6 +22,10 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
     const toggleOpen = useCallback(() => {
         setIsOpen((value) => !value);
     }, []);
+    const handleSignOut = () =>{
+        localStorage.removeItem("userToken");
+        window.location.reload(); // Reloads the entire page
+    }
     return (
         <div className="relative">
             <div className="flex flex-row items-center gap-3">
@@ -106,7 +109,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
                             />
                             <hr/>
                             <MenuItem
-                            onClick={ () => signOut()}
+                            onClick={ () => handleSignOut()}
                             label="Logout"
                             />
                         </>
