@@ -4,7 +4,7 @@ import { IoMdClose } from "react-icons/io";
 import Button from "../Button"; // Adjust the import path as necessary
 
 interface ModalProps {
-    isOpen?:boolean;
+    isOpen?: boolean;
     onClose: () => void;
     onSubmit: () => void;
     title?: string;
@@ -13,10 +13,10 @@ interface ModalProps {
     actionLabel: string;
     disabled?: boolean;
     secondaryAction?: () => void;
-    secondaryActionLabel?:  string;
+    secondaryActionLabel?: string;
 }
 
-const Modal:React.FC<ModalProps> = ({
+const Modal: React.FC<ModalProps> = ({
     isOpen,
     onClose,
     onSubmit,
@@ -29,11 +29,11 @@ const Modal:React.FC<ModalProps> = ({
     secondaryActionLabel
 }) => {
     const [showModal, setShowModal] = useState(isOpen);
-    useEffect(()=> {
+    useEffect(() => {
         setShowModal(isOpen)
     }, [isOpen]);
     const handleClose = useCallback(() => {
-        if(disabled) {
+        if (disabled) {
             return;
         }
         setShowModal(false);
@@ -42,25 +42,24 @@ const Modal:React.FC<ModalProps> = ({
         }, 300);
     }, [onClose, disabled]);
     const handleSubmit = useCallback(() => {
-        if(disabled) {
+        if (disabled) {
             return;
         }
         onSubmit();
     }, [disabled, onSubmit]);
     const handleSecondaryAction = useCallback(() => {
-        if(disabled || !secondaryAction) {
+        if (disabled || !secondaryAction) {
             return;
         }
         secondaryAction();
-    }
-    , [disabled, secondaryAction]);
-    if(!isOpen) {
+    }, [disabled, secondaryAction]);
+    if (!isOpen) {
         return null;
-    }    
+    }
     return (
         <>
-        <div
-            className="
+            <div
+                className="
               justify-center
               items-center
               flex
@@ -73,7 +72,7 @@ const Modal:React.FC<ModalProps> = ({
               focus:outline-none
               bg-neutral-800/70">
                 <div
-                className="
+                    className="
                     relative
                     w-full
                     md:w-4/6
@@ -90,7 +89,7 @@ const Modal:React.FC<ModalProps> = ({
                         duration-300
                         h-full
                         ${showModal ? 'translate-y-0' : 'translate-y-full'}
-                        ${showModal ? 'opacity-100' : 'opacity-0'}">   
+                        ${showModal ? 'opacity-100' : 'opacity-0'}">
 
                         <div
                             className="
@@ -108,7 +107,7 @@ const Modal:React.FC<ModalProps> = ({
                                 rounded-xl
                                 outline-none
                                 focus:outline-none">
-                                    {/*  HEADER  */}
+                            {/*  HEADER  */}
                             <div
                                 className="
                                     flex
@@ -118,8 +117,8 @@ const Modal:React.FC<ModalProps> = ({
                                     border-b[1px]
                                     relative
                                     rounded-t">
-                                
-                                <button 
+
+                                <button
                                     onClick={handleClose}
                                     className="
                                         absolute
@@ -129,13 +128,13 @@ const Modal:React.FC<ModalProps> = ({
                                         hover:opacity-70
                                         transition
                                         "
-                                    >
-                                        <IoMdClose size={18} />
+                                >
+                                    <IoMdClose size={18} />
 
                                 </button>
                                 <div
                                     className="text-lg font-semibold">
-                                        {title}
+                                    {title}
                                 </div>
                             </div>
                             {/*  BODY  */}
@@ -152,35 +151,29 @@ const Modal:React.FC<ModalProps> = ({
                                     gap-4
                                     w-full
                                     ">
-                                 {secondaryAction && secondaryActionLabel && (
-                                            
-                                       
-                                    <Button 
-                                        outline
-                                        disabled={disabled}
-                                        label={secondaryActionLabel}
-                                        onClick={handleSubmit}
-                                        
-                                    />
-                                )}
-                                    <Button 
+                                    {secondaryAction && secondaryActionLabel && (
+                                        <Button
+                                            outline
+                                            disabled={disabled}
+                                            label={secondaryActionLabel}
+                                            onClick={handleSecondaryAction} // Use handleSecondaryAction here
+                                        />
+                                    )}
+                                    <Button
                                         disabled={disabled}
                                         label={actionLabel}
                                         onClick={handleSubmit}
-                                        
+
                                     />
                                 </div>
                                 {footer}
                             </div>
                         </div>
+                    </div>
                 </div>
             </div>
-         </div>
         </>
     );
-
-
-
 }
 
 export default Modal;
