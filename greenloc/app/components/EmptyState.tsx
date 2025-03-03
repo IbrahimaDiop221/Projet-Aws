@@ -1,7 +1,44 @@
-const EmptyState =() => {
+import { useRouter } from "next/navigation";
+import Heading from "./Heading";
+import Button from "./Button";
+
+interface EmptyState {
+    title?: string;
+    substitle?: string;
+    showReset?: boolean;
+}
+
+const EmptyState: React.FC<EmptyState> = ({
+    title ="No exact matches",
+    subtitle = "Try changing or removing same of your filters",
+    showReset
+}) => {
+    const router = useRouter();
     return (
-        <div>
-            Empty
+        <div
+        className="
+        h-[60vh]
+        flex
+        flex-col
+        gap-2
+        justify-center
+        items-center
+            "
+        >
+        <Heading
+            center
+            title={title}
+            subTitle={subtitle}
+         />
+         <div className="w-48 mt-4">
+            {showReset && (
+                <Button
+                outline
+                label="remove all filters"
+                onClick={() => router.push('/')}
+                />
+            )} 
+         </div>
         </div>
     );
 }
