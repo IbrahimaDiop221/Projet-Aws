@@ -1,13 +1,16 @@
-import getListings from "./actions/hetListings";
+import getCurrentUser from "./actions/getCurrentUser";
+import getListings from "./actions/getListings";
 
 import ClientOnly from "./components/ClientOnly";
 import Container from "./components/Container";
 import EmptyState from "./components/EmptyState";
+import ListingsCard from "./components/listings/listingCard";
 
-export default function Home() {
+export default async function Home() {
   const Listings = await getListings();
+  const currentUser = await getCurrentUser();
 
-  if (Listings.lengs == 0){
+  if (listings.length == 0) {
     return(
       <ClientOnly>
         <EmptyState showReset />
