@@ -1,12 +1,13 @@
-import Image from "next/image";
+import getListings from "./actions/hetListings";
+
 import ClientOnly from "./components/ClientOnly";
 import Container from "./components/Container";
 import EmptyState from "./components/EmptyState";
 
 export default function Home() {
-  const isEmpty = true;
+  const Listings = await getListings();
 
-  if (isEmpty){
+  if (Listings.lengs == 0){
     return(
       <ClientOnly>
         <EmptyState showReset />
@@ -27,8 +28,15 @@ export default function Home() {
         2xl:grid-cols-6
         gap-8
         ">
-          <div>My future listings</div>
-        </div>
+          {Listings.map((listing: any) => {
+            return (
+              <ListingsCard
+              key={listing.id}
+              data={listing}
+              />
+            )
+          })}
+          </div>
       </Container>
     </ClientOnly>
   );
