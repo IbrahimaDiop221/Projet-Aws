@@ -29,6 +29,9 @@ enum STEPS {
 const RentModal = () => {
     const router = useRouter();
     const rentModal = useRentModal();
+    const [step, setStep] = useState(STEPS.CATEGORY);
+    const [isLoading, setIsLoading] = useState(false);
+
 
     const {
         register,
@@ -215,6 +218,34 @@ const RentModal = () => {
             </div>
         )
     }
+
+if (step == STEPS.DESCRIPTION){
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <Heading
+        title="How would you discrabe your place ?"
+        subTitle="Short and sweet works best! "
+        />
+        <Input 
+        id="title"
+        label="Title"
+        disabled={isLoading}
+        register={register}
+        errors={errors}
+        required
+        />
+        <hr />
+        <Input 
+        id="description"
+        label="Description"
+        disabled={isLoading}
+        register={register}
+        errors={errors}
+        required
+        />
+      </div>
+    )
+}
 
     if(step === STEPS.DESCRIPTION) {
         bodyContent = (
