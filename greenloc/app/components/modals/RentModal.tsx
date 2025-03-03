@@ -247,6 +247,26 @@ if (step == STEPS.DESCRIPTION){
     )
 }
 
+if (steps == STEPS.PRICE) {
+    bodyContent =(
+        <div className="flex flex-col gap-8">
+        <Heading
+        title="Now, set you charge per night?"
+        />
+        <input 
+        id="price"
+        label="price"
+        formatPrice
+        type="number"
+        disabled={isloading}
+        register={register}
+        errors={errors}
+        required
+     />
+        </div>
+    )
+}
+
     if(step === STEPS.DESCRIPTION) {
         bodyContent = (
             <div className="flex flex-col gap-8">
