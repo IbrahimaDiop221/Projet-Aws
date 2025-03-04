@@ -5,9 +5,21 @@
 html,
 body,
 :root {
-  height: 100%;
+    height: 100%;
 }
 
-body {
-  @apply bg-gray-100;
+.leafleft-bottom,
+.leafleft-control,
+.leafleft-pane,
+.leafleft-top {
+    z-index: 0 !important;
+}
+
+.rdrMonth,
+.rdrCalendarWrapper {
+    width: 100% !important;
+}
+
+.rdrCalendarWrapper {
+    font-size: 16px !important;
 }

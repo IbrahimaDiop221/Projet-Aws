@@ -1,35 +1,39 @@
 'use client';
 
-import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form';
-import { BiDollar } from 'react-icons/bi';
+import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
+import { BiDollar } from "react-icons/bi";
 
 interface InputProps {
-    id : string;
-    label : string;
-    type? : string;
-    disabled? : boolean;
-    formatPrice? : boolean;
-    required? : boolean;
-    register : UseFormRegister<FieldValues>;
-    errors : FieldErrors
+    id: string;
+    label: string;
+    type?: string;
+    disabled?: boolean;
+    formatPrice?: boolean;
+    required?: boolean;
+    register: UseFormRegister<FieldValues>;
+    errors: FieldErrors;
 }
 const Input:React.FC<InputProps> = ({
-     id, 
-     label, 
-     type = 'text', 
-     disabled, 
-     formatPrice, 
-     required, 
-     register, 
-     errors 
-    }) => {
+    id,
+    label,
+    type = 'text',
+    disabled,
+    formatPrice,
+    required,
+    register,
+    errors
 
+}) => {
     return (
-        <div className='w-full relative'>
+        <div className="w-full relative">
             {formatPrice && (
-                <BiDollar size={24} className='text-neutral-700 absolute top-5 left-2' />
+                <BiDollar
+                    size={24}
+                    className="text-neutral-700 absolute top-5 left-2"
+                />
             )}
-          <input
+
+            <input
                 id={id}
                 disabled={disabled}
                 {...(register(id, { required }))}
@@ -53,7 +57,7 @@ const Input:React.FC<InputProps> = ({
                     ${errors[id] ? 'focus:border-green-500' : 'focus:border-black'}
                 `}
             />
-           <label
+            <label
                 className={`
                     absolute
                     text-md
@@ -74,8 +78,7 @@ const Input:React.FC<InputProps> = ({
                 {label}
             </label>
         </div>
-    );
-
+    )
 }
 
 export default Input;
