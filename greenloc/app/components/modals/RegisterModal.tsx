@@ -1,24 +1,38 @@
 'use client';
 
 import axios from 'axios';
-import { AiFillGithub } from 'react-icons/ai';
-import { FcGoogle } from 'react-icons/fc';
-import { useState } from 'react';
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import useRegisterModal from '@/app/hooks/useRegisterModal';
-import useLoginModal from '@/app/hooks/useLoginModal';
-import Heading from '@/app/components/Heading';
-import Modal from '@/app/components/modals/Modal';
-import Input from '@/app/components/inputs/Input';
-import Button from '@/app/components/Button';
-import { toast } from 'react-hot-toast';
+
+import { AiFillGithub } from 'react-icons/ai'
+import { FcGoogle } from "react-icons/fc";
+import { useCallback, useState } from "react";
+
+import {
+    FieldValues,
+    SubmitHandler,
+    useForm
+} from 'react-hook-form'
+
+import useRegisterModal from "@/app/hooks/useRegisterModal";
+import useLoginModal from "@/app/hooks/useLoginModal";
+import Modal from "@/app/components/modals/Modal";
+import Heading from "@/app/components/Heading";
+import Input from "@/app/components/inputs/Input";
+import toast from "react-hot-toast";
+import Button from "@/app/components/Button";
+import { signIn } from "next-auth/react";
 
 const RegisterModal = () => {
     const registerModal = useRegisterModal();
     const loginModal = useLoginModal();
     const [isLoading, setIsLoading] = useState(false);
 
-    const { register, handleSubmit, formState: { errors } } = useForm<FieldValues>({
+    const {
+        register,
+        handleSubmit,
+        formState: {
+            errors
+        }
+    } = useForm<FieldValues>({
         defaultValues: {
             name: '',
             email: '',
@@ -31,43 +45,93 @@ const RegisterModal = () => {
 
         axios.post('/api/register', data)
             .then(() => {
+                toast.success('User created successfully');
+
                 registerModal.onClose();
+                loginModal.onOpen();
             })
             .catch((error) => {
-                toast.error('Il y a une erreur');
+                console.log(error)
+                toast.error('Something went wrong!');
             })
             .finally(() => {
                 setIsLoading(false);
-            });
-    };
+            })
+    }
 
-    const handleLoginClick = () => {
+    const toggle = useCallback(() => {
         registerModal.onClose();
         loginModal.onOpen();
-    };
+    }, [loginModal, registerModal]);
 
     const bodyContent = (
         <div className="flex flex-col gap-4">
-            <Heading title="Bienvenue sur GreenLoc" subTitle="Inscrivez-vous pour continuer" />
-            <Input id="email" label="Email" disabled={isLoading} register={register} errors={errors} required />
-            <Input id="name" label="Nom" disabled={isLoading} register={register} errors={errors} required />
-            <Input id="password" label="Password" disabled={isLoading} register={register} errors={errors} required />
+            <Heading
+                title="Welcome to Greenloc"
+                subTitle="Create an account!"
+            />
+
+            <Input
+                id="email"
+                label="E-mail"
+                disabled={isLoading}
+                register={register}
+                errors={errors}
+                required
+            />
+
+            <Input
+                id="name"
+                label="Name"
+                disabled={isLoading}
+                register={register}
+                errors={errors}
+                required
+            />
+
+            <Input
+                id="password"
+                type="password"
+                label="Password"
+                disabled={isLoading}
+                register={register}
+                errors={errors}
+                required
+            />
         </div>
-    );
+    )
 
     const footerContent = (
-        <div className='flex flex-col gap-4'>
+        <div className="flex flex-col gap-4 mt-3">
             <hr />
-            <Button label="Continue with Google" icon={FcGoogle} onClick={() => {}} disabled={isLoading} />
-            <Button label="Continue with Github" icon={AiFillGithub} onClick={() => {}} disabled={isLoading} />
+            <Button
+                outline
+                label="Continue with Google"
+                icon={FcGoogle}
+                onClick={() => signIn('google')}
+            />
+
+            <Button
+                outline
+                label="Continue with Github"
+                icon={AiFillGithub}
+                onClick={() => signIn('github')}
+            />
             <div className="text-neutral-500 text-center mt-4 font-light">
-                <div className="flex flex-row items-center gap-2">
-                    <div>Already have an account?</div>
-                    <div onClick={handleLoginClick} className="text-neutral-800 cursor-pointer hover:underline">Se connecter</div>
+                <div className="flex flex-row items-center justify-center gap-2">
+                    <div>
+                        Already have an account?
+                    </div>
+                    <div
+                        onClick={toggle}
+                        className="text-neutral-800 cursor-pointer hover:underline"
+                    >
+                        Log in
+                    </div>
                 </div>
             </div>
         </div>
-    );
+    )
 
     return (
         <Modal
@@ -79,10 +143,8 @@ const RegisterModal = () => {
             onSubmit={handleSubmit(onSubmit)}
             body={bodyContent}
             footer={footerContent}
-            secondaryAction={handleLoginClick}
-            secondaryActionLabel="Login"
         />
-    );
-};
+    )
+}
 
 export default RegisterModal;

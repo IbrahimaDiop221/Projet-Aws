@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import { signIn } from "next-auth/react";
 
@@ -20,7 +20,6 @@ import Input from "@/app/components/inputs/Input";
 import toast from "react-hot-toast";
 import Button from "@/app/components/Button";
 import useLoginModal from "@/app/hooks/useLoginModal";
-import axios from "axios";
 const LoginModal = () => {
     const router = useRouter();
 
@@ -45,42 +44,21 @@ const LoginModal = () => {
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
         setIsLoading(true);
 
-        axios.post('/api/login', data)
-        .then((response) => {
-            // Check if the response is successful
-            if (response.status === 200) {
-                // Assuming the response contains a success message or user data
-                console.log('Connexion réussie! ' );
-                console.log(response.data)
-    
-                // Perform any actions after successful login
-                // Example: Saving token or user data in localStorage or state
-                localStorage.setItem('userToken', response.data.token);
-               
-                loginModal.onClose();
-                window.location.reload(); // Reloads the entire page
-
-            } else {
-                // Handle cases where response code is not 200, if necessary
-                toast.error('Une erreur s\'est produite lors de la connexion.');
-            }
+        signIn('credentials', {
+            ...data,
+            redirect: false
         })
-        .catch((error) => {
-            // Handle different types of error responses
-            if (error.response) {
-                console.log(error.response)
-                // Server-side error (e.g., 401 - Unauthorized, 500 - Internal Server Error)
-                if (error.response.status === 401) {
-                    toast.error('Identifiants incorrects.');
-                } else {
-                    toast.error('Erreur serveur, réessayez plus tard.');
-                }
-            } else if (error.request) {
-                // Network error or no response from server
-                toast.error('Problème de connexion. Vérifiez votre connexion réseau.');
-            } else {
-                // Any other error (e.g., invalid axios setup)
-                toast.error('Une erreur inattendue est survenue.');
+        .then((callback) => {
+            setIsLoading(false);
+
+            if(callback?.ok){
+                toast.success('Logged in');
+                router.refresh();
+                loginModal.onClose()
+            }
+
+            if(callback?.error) {
+                toast.error(callback.error)
             }
         })
     }
@@ -137,7 +115,7 @@ const LoginModal = () => {
             <div className="text-neutral-500 text-center mt-4 font-light">
                 <div className="flex flex-row items-center justify-center gap-2">
                     <div>
-                        First time using Airbnb?
+                        First time using Greenloc?
                     </div>
                     <div
                         onClick={toggle}
