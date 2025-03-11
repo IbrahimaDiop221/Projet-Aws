@@ -21,6 +21,7 @@ model User {
   emailVerified DateTime?
   image String?
   createdAt DateTime? @default(now())
+  favoriteIds String[] @db.ObjectId  // Ajoutez cette ligne
   updatedAt DateTime? @updatedAt
   reservations Reservation[] //relation un à plusieurs
   listings Listing[] //relation un à plusieurs

@@ -23,7 +23,7 @@ const ImageUpload = ({ onChange, value }: ImageUploadProps) => {
     return (
         <CldUploadWidget
             onUpload={handleUpload}
-            uploadPreset="dzncvjmze"
+            uploadPreset="greenloc"
             options={{
                 maxFiles: 1
             }}
