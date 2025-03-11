@@ -45,6 +45,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/react-date-range": "^1.4.4",
     "prisma": "^5.22.0",
     "typescript": "5.1.6"
