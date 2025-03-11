@@ -26,8 +26,12 @@ export async function POST(request: Request) {
         }
 
         // Comparaison du mot de passe entré avec le mot de passe haché dans la base de données
-        const isPasswordValid = await bcrypt.compare(password, user.hashedPassword);
-
+        if (!user?.hashedPassword) {
+            throw new Error("Mot de passe non défini pour cet utilisateur.");
+          }
+          
+          const isPasswordValid = await bcrypt.compare(password, user.hashedPassword);
+          
         // Si le mot de passe est incorrect, retourne une erreur
         if (!isPasswordValid) {
             return NextResponse.json({ error: "Mot de passe incorrect" }, { status: 401 });
