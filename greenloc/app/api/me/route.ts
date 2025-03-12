@@ -32,6 +32,11 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid or expired token' }, { status: 401 });
   }
 
+  // Vérifiez que decoded.userId n'est pas nul
+  if (!decoded.userId) {
+    return NextResponse.json({ error: 'Invalid token payload' }, { status: 401 });
+  }
+
   // Fetch user data from the database using the userId from the decoded token
   const user = await prisma.user.findUnique({
     where: { id: decoded.userId }, // Assuming `userId` is part of the decoded token
@@ -42,7 +47,7 @@ export async function GET(req: NextRequest) {
   }
 
   // Return user info (remove sensitive information like password)
-  const { password, ...userData } = user;
+  const { hashedPassword, ...userData } = user;
 
   return NextResponse.json({ currentUser: userData });
 }
