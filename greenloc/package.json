@@ -28,6 +28,8 @@
     "next": "13.4.12",
     "next-auth": "^4.22.3",
     "next-cloudinary": "^4.17.1",
+    "next-i18next": "^15.4.2",
+    "node-fetch": "^3.3.2",
     "postcss": "8.4.27",
     "query-string": "^8.1.0",
     "react": "18.2.0",
@@ -35,6 +37,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.2",
     "react-hot-toast": "^2.4.1",
+    "react-i18next": "^15.4.1",
     "react-icons": "^4.10.1",
     "react-leaflet": "^4.2.1",
     "react-select": "^5.7.4",
@@ -48,6 +51,7 @@
     "@types/jsonwebtoken": "^9.0.9",
     "@types/react-date-range": "^1.4.4",
     "prisma": "^6.5.0",
+    "react-google-recaptcha": "^3.1.0",
     "typescript": "5.1.6"
   }
 }

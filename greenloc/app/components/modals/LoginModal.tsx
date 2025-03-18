@@ -1,17 +1,12 @@
 'use client';
 
 import { signIn } from "next-auth/react";
-
-import { AiFillGithub } from 'react-icons/ai'
+import { AiFillGithub } from 'react-icons/ai';
 import { FcGoogle } from "react-icons/fc";
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
-
-import {
-    FieldValues,
-    SubmitHandler,
-    useForm
-} from 'react-hook-form'
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import ReCAPTCHA from "react-google-recaptcha";
 
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import Modal from "@/app/components/modals/Modal";
@@ -20,6 +15,7 @@ import Input from "@/app/components/inputs/Input";
 import toast from "react-hot-toast";
 import Button from "@/app/components/Button";
 import useLoginModal from "@/app/hooks/useLoginModal";
+
 const LoginModal = () => {
     const router = useRouter();
 
@@ -27,13 +23,12 @@ const LoginModal = () => {
     const loginModal = useLoginModal();
 
     const [isLoading, setIsLoading] = useState(false);
+    const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
     const {
         register,
         handleSubmit,
-        formState: {
-            errors
-        }
+        formState: { errors }
     } = useForm<FieldValues>({
         defaultValues: {
             email: '',
@@ -42,31 +37,41 @@ const LoginModal = () => {
     });
 
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
+        if (!captchaToken) {
+            toast.error("Veuillez compléter le captcha.");
+            return;
+        }
+
         setIsLoading(true);
 
         signIn('credentials', {
             ...data,
+            captchaToken, // Inclure le token captcha
             redirect: false
         })
         .then((callback) => {
             setIsLoading(false);
 
-            if(callback?.ok){
+            if (callback?.ok) {
                 toast.success('Logged in');
                 router.refresh();
-                loginModal.onClose()
+                loginModal.onClose();
             }
 
-            if(callback?.error) {
-                toast.error(callback.error)
+            if (callback?.error) {
+                toast.error(callback.error);
             }
-        })
-    }
+        });
+    };
 
     const toggle = useCallback(() => {
         loginModal.onClose();
         registerModal.onOpen();
     }, [loginModal, registerModal]);
+
+    const handleCaptchaChange = (token: string | null) => {
+        setCaptchaToken(token);
+    };
 
     const bodyContent = (
         <div className="flex flex-col gap-4">
@@ -93,8 +98,15 @@ const LoginModal = () => {
                 errors={errors}
                 required
             />
+
+            {/* Widget reCAPTCHA */}
+            <ReCAPTCHA
+                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ""}
+                onChange={handleCaptchaChange}
+                onExpired={() => setCaptchaToken(null)}
+            />
         </div>
-    )
+    );
 
     const footerContent = (
         <div className="flex flex-col gap-4 mt-3">
@@ -126,7 +138,7 @@ const LoginModal = () => {
                 </div>
             </div>
         </div>
-    )
+    );
 
     return (
         <Modal
@@ -139,7 +151,7 @@ const LoginModal = () => {
             body={bodyContent}
             footer={footerContent}
         />
-    )
-}
+    );
+};
 
 export default LoginModal;
