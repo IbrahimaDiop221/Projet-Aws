@@ -27,8 +27,8 @@ export async function POST(request: Request) {
             }),
         });
 
-        // Typage explicite de la réponse JSON
-        const captchaResult: CaptchaResponse = await captchaResponse.json();
+        // Typage explicite de la réponse JSON avec une assertion de type
+        const captchaResult = (await captchaResponse.json()) as CaptchaResponse;
 
         // Si le captcha est invalide, retourne une erreur
         if (!captchaResult.success) {
