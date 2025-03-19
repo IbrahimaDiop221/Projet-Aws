@@ -12,8 +12,10 @@ interface InputProps {
     required?: boolean;
     register: UseFormRegister<FieldValues>;
     errors: FieldErrors;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; // Ajout de la propriété onChange
 }
-const Input:React.FC<InputProps> = ({
+
+const Input: React.FC<InputProps> = ({
     id,
     label,
     type = 'text',
@@ -21,8 +23,8 @@ const Input:React.FC<InputProps> = ({
     formatPrice,
     required,
     register,
-    errors
-
+    errors,
+    onChange, // Ajout de onChange
 }) => {
     return (
         <div className="w-full relative">
@@ -36,9 +38,10 @@ const Input:React.FC<InputProps> = ({
             <input
                 id={id}
                 disabled={disabled}
-                {...(register(id, { required }))}
+                {...register(id, { required })}
                 placeholder=" "
                 type={type}
+                onChange={onChange} // Passer onChange à l'élément input
                 className={`
                     peer
                     w-full
@@ -78,7 +81,7 @@ const Input:React.FC<InputProps> = ({
                 {label}
             </label>
         </div>
-    )
-}
+    );
+};
 
 export default Input;

@@ -26,6 +26,13 @@ const RegisterModal = () => {
     const loginModal = useLoginModal();
     const [isLoading, setIsLoading] = useState(false);
     const [captchaToken, setCaptchaToken] = useState<string | null>(null); // État pour le token reCAPTCHA
+    const [password, setPassword] = useState(""); // État pour le mot de passe
+    const [passwordConditions, setPasswordConditions] = useState({
+        minLength: false,
+        hasUppercase: false,
+        hasNumber: false,
+        hasSpecialChar: false,
+    });
 
     const {
         register,
@@ -74,6 +81,19 @@ const RegisterModal = () => {
         loginModal.onOpen();
     }, [loginModal, registerModal]);
 
+    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setPassword(value);
+
+        // Vérifier les conditions du mot de passe
+        setPasswordConditions({
+            minLength: value.length >= 8,
+            hasUppercase: /[A-Z]/.test(value),
+            hasNumber: /[0-9]/.test(value),
+            hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(value),
+        });
+    };
+
     const bodyContent = (
         <div className="flex flex-col gap-4">
             <Heading
@@ -99,15 +119,32 @@ const RegisterModal = () => {
                 required
             />
 
-            <Input
-                id="password"
-                type="password"
-                label="Password"
-                disabled={isLoading}
-                register={register}
-                errors={errors}
-                required
-            />
+            <div>
+                <Input
+                    id="password"
+                    type="password"
+                    label="Password"
+                    disabled={isLoading}
+                    register={register}
+                    errors={errors}
+                    required
+                    onChange={handlePasswordChange} // Correction : Typage explicite pour onChange
+                />
+                <div className="mt-2 text-sm">
+                    <div className={`flex items-center gap-2 ${passwordConditions.minLength ? 'text-green-500' : 'text-red-500'}`}>
+                        <span>✔</span> Minimum 8 caractères
+                    </div>
+                    <div className={`flex items-center gap-2 ${passwordConditions.hasUppercase ? 'text-green-500' : 'text-red-500'}`}>
+                        <span>✔</span> Une majuscule
+                    </div>
+                    <div className={`flex items-center gap-2 ${passwordConditions.hasNumber ? 'text-green-500' : 'text-red-500'}`}>
+                        <span>✔</span> Un chiffre
+                    </div>
+                    <div className={`flex items-center gap-2 ${passwordConditions.hasSpecialChar ? 'text-green-500' : 'text-red-500'}`}>
+                        <span>✔</span> Un caractère spécial
+                    </div>
+                </div>
+            </div>
 
             {/* Widget reCAPTCHA */}
             <ReCAPTCHA
