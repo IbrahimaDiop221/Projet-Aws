@@ -1,16 +1,16 @@
 'use client';
 
 import axios from 'axios';
-
-import { AiFillGithub } from 'react-icons/ai'
+import { AiFillGithub } from 'react-icons/ai';
 import { FcGoogle } from "react-icons/fc";
 import { useCallback, useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 
 import {
     FieldValues,
     SubmitHandler,
     useForm
-} from 'react-hook-form'
+} from 'react-hook-form';
 
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import useLoginModal from "@/app/hooks/useLoginModal";
@@ -25,6 +25,7 @@ const RegisterModal = () => {
     const registerModal = useRegisterModal();
     const loginModal = useLoginModal();
     const [isLoading, setIsLoading] = useState(false);
+    const [captchaToken, setCaptchaToken] = useState<string | null>(null); // État pour le token reCAPTCHA
 
     const {
         register,
@@ -41,9 +42,14 @@ const RegisterModal = () => {
     });
 
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
+        if (!captchaToken) {
+            toast.error("Veuillez compléter le captcha.");
+            return;
+        }
+
         setIsLoading(true);
 
-        axios.post('/api/register', data)
+        axios.post('/api/register', { ...data, captchaToken }) // Inclure le token reCAPTCHA
             .then(() => {
                 toast.success('User created successfully');
 
@@ -51,13 +57,17 @@ const RegisterModal = () => {
                 loginModal.onOpen();
             })
             .catch((error) => {
-                console.log(error)
+                console.log(error);
                 toast.error('Something went wrong!');
             })
             .finally(() => {
                 setIsLoading(false);
-            })
-    }
+            });
+    };
+
+    const handleCaptchaChange = (token: string | null) => {
+        setCaptchaToken(token); // Mettre à jour le token reCAPTCHA
+    };
 
     const toggle = useCallback(() => {
         registerModal.onClose();
@@ -98,8 +108,15 @@ const RegisterModal = () => {
                 errors={errors}
                 required
             />
+
+            {/* Widget reCAPTCHA */}
+            <ReCAPTCHA
+                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ""}
+                onChange={handleCaptchaChange}
+                onExpired={() => setCaptchaToken(null)} // Réinitialiser le token si le captcha expire
+            />
         </div>
-    )
+    );
 
     const footerContent = (
         <div className="flex flex-col gap-4 mt-3">
@@ -131,7 +148,7 @@ const RegisterModal = () => {
                 </div>
             </div>
         </div>
-    )
+    );
 
     return (
         <Modal
@@ -144,7 +161,7 @@ const RegisterModal = () => {
             body={bodyContent}
             footer={footerContent}
         />
-    )
-}
+    );
+};
 
 export default RegisterModal;
