@@ -1,9 +1,9 @@
 'use client';
 
-import {  Reservation } from "@prisma/client";
-import {SafeListing, SafeReservation, SafeUser} from "@/app/types";
+import { Reservation } from "@prisma/client";
+import { SafeListing, SafeReservation, SafeUser } from "@/app/types";
 import { useRouter } from "next/navigation";
-import { format } from  "date-fns"
+import { format } from "date-fns";
 import React, { useCallback, useMemo } from "react";
 
 import useCountries from "@/app/hooks/useCountries";
@@ -18,8 +18,23 @@ interface ListingCardProps {
     disabled?: boolean;
     actionLabel?: string;
     actionId?: string;
-    currentUser?: SafeUser | null
+    currentUser?: SafeUser | null;
 }
+
+// Objet de correspondance des catégories
+const categoryTranslations: { [key: string]: string } = {
+    Beach: "Plage",
+    Mountains: "Montagnes",
+    Countryside: "Campagne",
+    City: "Ville",
+    Islands: "Îles",
+    Lake: "Lac",
+    Skiing: "Ski",
+    Camping: "Camping",
+    Desert: "Désert",
+    Forest: "Forêt",
+    // Ajoutez d'autres catégories si nécessaire
+};
 
 const ListingCard = ({
     data,
@@ -38,7 +53,7 @@ const ListingCard = ({
     const handleCancel = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
 
-        if(disabled) {
+        if (disabled) {
             return;
         }
 
@@ -46,24 +61,23 @@ const ListingCard = ({
     }, [onAction, actionId, disabled]);
 
     const price = useMemo(() => {
-        if(reservation) {
-            return reservation.totalPrice
+        if (reservation) {
+            return reservation.totalPrice;
         }
 
-        return data.price
+        return data.price;
     }, [reservation, data.price]);
 
     const reservationDate = useMemo(() => {
-        if(!reservation) {
+        if (!reservation) {
             return null;
         }
 
-        const start = new Date(reservation.startDate)
+        const start = new Date(reservation.startDate);
         const end = new Date(reservation.endDate);
 
         return `${format(start, 'PP')} - ${format(end, 'PP')}`;
-
-    }, [reservation])
+    }, [reservation]);
 
     return (
         <div
@@ -89,14 +103,14 @@ const ListingCard = ({
                     {location?.region}, {location?.label}
                 </div>
                 <div className="font-light text-neutral-500">
-                    {reservationDate || data.category}
+                    {reservationDate || categoryTranslations[data.category] || data.category}
                 </div>
                 <div className="flex flex-row items-center gap-1">
                     <div className="font-semibold">
                         $ {price}
                     </div>
                     {!reservation && (
-                        <div className="font-light">night</div>
+                        <div className="font-light">nuit</div>
                     )}
                 </div>
                 {onAction && actionLabel && (
@@ -109,7 +123,7 @@ const ListingCard = ({
                 )}
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default ListingCard;
