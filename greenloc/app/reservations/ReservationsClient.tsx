@@ -26,22 +26,22 @@ const ReservationsClient = ({
 
         axios.delete(`/api/reservations/${id}`)
             .then(() => {
-                toast.success('Reservation cancelled')
-                router.refresh()
+                toast.success('Réservation annulée');
+                router.refresh();
             })
             .catch((error) => {
-                toast.error('Something went wrong!')
+                toast.error('Une erreur est survenue !');
             })
             .finally(() => {
                 setDeletingId('');
-            })
-    }, [router])
+            });
+    }, [router]);
 
     return (
         <Container>
             <Heading
-                title="Reservation"
-                subTitle="Bookings on your properties"
+                title="Réservations"
+                subTitle="Réservations sur vos propriétés"
             />
             <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8">
                 {reservations.map((reservation) => (
@@ -52,13 +52,13 @@ const ReservationsClient = ({
                         actionId={reservation.id}
                         onAction={onCancel}
                         disabled={deletingId === reservation.id}
-                        actionLabel="Cancel guest reservation"
+                        actionLabel="Annuler la réservation de l'invité"
                         currentUser={currentUser}
                     />
                 ))}
             </div>
         </Container>
-    )
-}
+    );
+};
 
 export default ReservationsClient;

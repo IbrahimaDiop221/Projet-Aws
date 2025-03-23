@@ -45,7 +45,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
                     className="hidden md:block text-sm font-semibold py-3 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer"
                     onClick={onRent}
                 >
-                    Greenloc your home
+                    Créer une annonce
                 </div>
                 <div
                     className="p-4 md:py-1 md:px-2 border-[1px] border-neutral-100 flex flex-row items-center gap-3 rounded-full cursor-pointer hover:shadow-md transition"
@@ -62,18 +62,18 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
                     <div className="flex flex-col cursor-pointer">
                             {currentUser ? (
                                 <>
-                                    <MenuItem onClick={() => router.push('/trips')} label="My trips" />
-                                    <MenuItem onClick={() => router.push('/favorites')} label="My favorites" />
-                                    <MenuItem onClick={() => router.push('/reservations')} label="My reservations" />
-                                    <MenuItem onClick={() => router.push('/properties')} label="My properties" />
-                                    <MenuItem onClick={rentModal.onOpen} label="Greenloc my home" />
+                                    <MenuItem onClick={() => router.push('/trips')} label="Mes voyages" />
+                                    <MenuItem onClick={() => router.push('/favorites')} label="Mes favoris" />
+                                    <MenuItem onClick={() => router.push('/reservations')} label="Mes réservations" />
+                                    <MenuItem onClick={() => router.push('/properties')} label="Mes propriétés" />
+                                    <MenuItem onClick={rentModal.onOpen} label="Greenloc ma maison" />
                                     <hr />
-                                    <MenuItem onClick={() => signOut()} label="Logout"/>
+                                    <MenuItem onClick={() => signOut()} label="Se déconnecter"/>
                                 </>
                             ):(
                                 <>
-                                    <MenuItem onClick={loginModal.onOpen} label="Login"/>
-                                    <MenuItem onClick={registerModal.onOpen} label="Sign up"/>
+                                    <MenuItem onClick={loginModal.onOpen} label="Se connecter"/>
+                                    <MenuItem onClick={registerModal.onOpen} label="S'inscrire"/>
                                 </>
                             )}
                     </div>

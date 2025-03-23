@@ -10,8 +10,8 @@ const TripsPage = async () => {
     if(!currentUser) {
         return (
             <EmptyState
-                title="Unauthorized"
-                subtitle="Please login"
+                title="Non autorisé"
+                subtitle="Veuillez vous connecter"
             />
         );
     }
@@ -23,8 +23,8 @@ const TripsPage = async () => {
     if(reservations.length === 0) {
         return (
             <EmptyState
-                title="No trips found"
-                subtitle="Looks like you havent reserved any trips"
+                title="Aucun voyage trouvé"
+                subtitle="Il semble que vous n'ayez réservé aucun voyage"
             />
         )
     }

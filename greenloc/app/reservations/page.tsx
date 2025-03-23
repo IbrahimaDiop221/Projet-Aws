@@ -1,4 +1,3 @@
-
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import getReservations from "@/app/actions/getReservations";
 import EmptyState from "@/app/components/EmptyState";
@@ -10,8 +9,8 @@ const ReservationsPage = async () => {
     if(!currentUser) {
         return (
             <EmptyState
-                title="Unauthorized"
-                subtitle="Please login"
+                title="Non autorisé"
+                subtitle="Veuillez vous connecter"
             />
         )
     }
@@ -23,8 +22,8 @@ const ReservationsPage = async () => {
     if(reservations.length === 0) {
         return (
             <EmptyState
-                title="No reservations found"
-                subtitle="Looks like you have no reservations on your properties"
+                title="Aucune réservation trouvée"
+                subtitle="Il semble que vous n'ayez aucune réservation sur vos propriétés"
             />
         )
     }

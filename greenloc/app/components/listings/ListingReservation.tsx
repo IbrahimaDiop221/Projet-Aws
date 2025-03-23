@@ -28,7 +28,7 @@ const ListingReservation = ({
                 </div>
 
                 <div className="font-light text-neutral-600">
-                    night
+                    nuit
                 </div>
             </div>
             <hr />
@@ -42,7 +42,7 @@ const ListingReservation = ({
 
             <div className="p-4">
                 <Button
-                    label="Reserve"
+                    label="Reserver"
                     onClick={onSubmit}
                     disabled={disabled}
                 />

@@ -36,7 +36,7 @@ const ImageUpload = ({ onChange, value }: ImageUploadProps) => {
                     >
                         <TbPhotoPlus size={50} />
                         <div className="font-semibold text-lg">
-                            Click to upload
+                            Cliquer pour téléverser une image
                         </div>
 
                         {value && (

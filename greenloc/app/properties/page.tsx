@@ -10,8 +10,8 @@ const PropertiesPage = async () => {
     if(!currentUser) {
         return (
             <EmptyState
-                title="Unauthorized"
-                subtitle="Please login"
+                title="Non autorisé"
+                subtitle="Veuillez vous connecter"
             />
         );
     }
@@ -23,8 +23,8 @@ const PropertiesPage = async () => {
     if(listings.length === 0) {
         return (
             <EmptyState
-                title="No properties found"
-                subtitle="Looks like you have no properties"
+                title="Aucune propriété trouvée"
+                subtitle="Il semble que vous n'ayez aucune propriété"
             />
         )
     }

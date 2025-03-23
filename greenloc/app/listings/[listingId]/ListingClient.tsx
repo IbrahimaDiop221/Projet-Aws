@@ -71,12 +71,12 @@ const ListingClient = ({
             endDate: dateRange.endDate,
             listingId: listing?.id
         }).then(() => {
-            toast.success('Listing reserved!')
+            toast.success('Annonce réservée avec succès !')
             setDateRange(initialDateRange)
 
             router.push('/trips');
         }).catch(() => {
-            toast.error('Something went wrong!')
+            toast.error('Une erreur est survenue !')
         }).finally(() => {
             setIsLoading(false)
         })

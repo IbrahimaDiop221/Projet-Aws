@@ -53,7 +53,7 @@ const LoginModal = () => {
             setIsLoading(false);
 
             if (callback?.ok) {
-                toast.success('Logged in');
+                toast.success('Connexion réussie');
                 router.refresh();
                 loginModal.onClose();
             }
@@ -76,8 +76,8 @@ const LoginModal = () => {
     const bodyContent = (
         <div className="flex flex-col gap-4">
             <Heading
-                title="Welcome back"
-                subTitle="Login to your account!"
+                title="Bienvenue à nouveau"
+                subTitle="Connectez-vous à votre compte !"
             />
 
             <Input
@@ -92,7 +92,7 @@ const LoginModal = () => {
             <Input
                 id="password"
                 type="password"
-                label="Password"
+                label="Mot de passe"
                 disabled={isLoading}
                 register={register}
                 errors={errors}
@@ -113,27 +113,27 @@ const LoginModal = () => {
             <hr />
             <Button
                 outline
-                label="Continue with Google"
+                label="Continuer avec Google"
                 icon={FcGoogle}
                 onClick={() => signIn('google')}
             />
 
             <Button
                 outline
-                label="Continue with Github"
+                label="Continuer avec Github"
                 icon={AiFillGithub}
                 onClick={() => signIn('github')}
             />
             <div className="text-neutral-500 text-center mt-4 font-light">
                 <div className="flex flex-row items-center justify-center gap-2">
                     <div>
-                        First time using Greenloc?
+                        Première fois sur Greenloc ?
                     </div>
                     <div
                         onClick={toggle}
                         className="text-neutral-800 cursor-pointer hover:underline"
                     >
-                        Create an account
+                        Créer un compte
                     </div>
                 </div>
             </div>
@@ -144,8 +144,8 @@ const LoginModal = () => {
         <Modal
             disabled={isLoading}
             isOpen={loginModal.isOpen}
-            title="Login"
-            actionLabel="Continue"
+            title="Connexion"
+            actionLabel="Continuer"
             onClose={loginModal.onClose}
             onSubmit={handleSubmit(onSubmit)}
             body={bodyContent}

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import axios from "axios";
 import toast from "react-hot-toast";
 
-import {SafeListing, SafeReservation, SafeUser} from "@/app/types";
+import { SafeListing, SafeUser } from "@/app/types";
 
 import Container from "@/app/components/Container";
 import Heading from "@/app/components/Heading";
@@ -16,7 +16,7 @@ interface PropertiesClientProps {
     currentUser?: SafeUser | null;
 }
 const PropertiesClient = ({
-                              listings,
+    listings,
     currentUser
 }: PropertiesClientProps) => {
     const router = useRouter();
@@ -27,7 +27,7 @@ const PropertiesClient = ({
 
         axios.delete(`/api/listings/${id}`)
             .then(() => {
-                toast.success('Property deleted');
+                toast.success('Propriété supprimée');
                 router.refresh();
             })
             .catch((error) => {
@@ -41,8 +41,8 @@ const PropertiesClient = ({
     return (
         <Container>
             <Heading
-                title="Properties"
-                subTitle="List of your properties"
+                title="Propriétés"
+                subTitle="Liste de vos propriétés"
             />
 
             <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8">
@@ -53,7 +53,7 @@ const PropertiesClient = ({
                         actionId={listing.id}
                         onAction={onCancel}
                         disabled={deletingId === listing.id}
-                        actionLabel="Delete property"
+                        actionLabel="Supprimer la propriété"
                         currentUser={currentUser}
                     />
                 ))}
