@@ -274,7 +274,7 @@ const RentModal = () => {
             actionLabel={actionLabel}
             secondaryActionLabel={secondaryActionLabel}
             secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
-            title="Greenloc votre logement"
+            title="Greenloc votre maison"
             body={bodyContent}
         />
     );

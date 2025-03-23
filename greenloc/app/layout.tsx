@@ -17,7 +17,7 @@ const font = Nunito({
 
 export const metadata: Metadata = {
   title: 'Greenloc',
-  description: 'Greenloc your home',
+  description: 'Greenloc votre maison',
 }
 
 export default async function RootLayout({
