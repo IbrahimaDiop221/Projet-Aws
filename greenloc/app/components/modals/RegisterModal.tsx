@@ -165,12 +165,7 @@ const RegisterModal = () => {
                 onClick={() => signIn('google')}
             />
 
-            <Button
-                outline
-                label="Continuer avec Github"
-                icon={AiFillGithub}
-                onClick={() => signIn('github')}
-            />
+           
             <div className="text-neutral-500 text-center mt-4 font-light">
                 <div className="flex flex-row items-center justify-center gap-2">
                     <div>
