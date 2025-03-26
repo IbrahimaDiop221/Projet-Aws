@@ -23,7 +23,7 @@ const TripsPage = async () => {
     if(reservations.length === 0) {
         return (
             <EmptyState
-                title="Aucun voyage trouvé"
+                title="Aucune réservation trouvé"
                 subtitle="Il semble que vous n'ayez réservé aucun voyage"
             />
         )

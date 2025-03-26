@@ -41,7 +41,7 @@ const TripsClient = ({
     return (
         <Container>
             <Heading
-                title="Voyages"
+                title="Réservations"
                 subTitle="Où vous êtes allé et où vous allez"
             />
 
